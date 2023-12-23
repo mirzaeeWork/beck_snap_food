@@ -1,0 +1,21 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.prodRouter = void 0;
+const express_1 = __importDefault(require("express"));
+const checkLogin_1 = require("../middleWare/checkLogin");
+const roleCheck_1 = require("../validation/roleCheck");
+const ProductController_1 = require("../controller/ProductController");
+const multer_1 = require("../moduls/multer");
+const prodRouter = express_1.default.Router();
+exports.prodRouter = prodRouter;
+prodRouter.post("/", checkLogin_1.checkLoginShop, multer_1.upload.single("prod"), ProductController_1.addProduct);
+prodRouter.put("/", checkLogin_1.checkLoginShop, multer_1.upload.single("prod"), ProductController_1.updateProduct);
+prodRouter.put("/available", checkLogin_1.checkLoginShop, ProductController_1.setavailableProduct);
+prodRouter.delete("/", checkLogin_1.checkLoginShop, ProductController_1.deleteProduct);
+prodRouter.get("/seller", checkLogin_1.checkLoginShop, (0, ProductController_1.getOneProduct)(1));
+prodRouter.get("/", (0, ProductController_1.getOneProduct)(2));
+prodRouter.patch("/", checkLogin_1.checkLogin, (0, roleCheck_1.checkRole)("product", "update"), ProductController_1.setproduct);
+prodRouter.get("/product", checkLogin_1.checkLogin, (0, roleCheck_1.checkRole)("product", "read"), (0, ProductController_1.getOneProduct)(3));
